@@ -10,7 +10,7 @@ It provides comprehensive services to help you build fast and efficientweb appli
 - StormSQL: A performant SQL Driver \n
 - LitePay: An easy-to-use web payment system \n
 - LiteCache: A caching system to improve performance by storing frequently accessed data \n
-- StormTools: An SDK for managing sessions, cookies, emails and a lot more \n
+- StormSDK: An SDK for managing sessions, cookies, emails and a lot more \n
 
 ## Features:
 
