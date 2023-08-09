@@ -9,9 +9,6 @@ use crate::http::{Response, StatusCode};
 use futures_executor::block_on;
 use num_cpus;
 use crate::openapi::openapi;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use ctrlc;
 
 fn handle_client(mut stream: TcpStream, routes: Routes) {
     // Read request from client
@@ -206,7 +203,7 @@ impl LiteAPI {
         let pool = ThreadPool::new(num_cpus::get());
 
         // Listen for incoming requests
-        while running.load(Ordering::SeqCst) {
+        loop {
             let (stream, _) = listener.accept().unwrap();
             let routes = self.routes.clone();
 
