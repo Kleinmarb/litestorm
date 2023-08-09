@@ -1,6 +1,7 @@
 [package]
 name = "liteapi"
 version = "0.1.0-beta.0"
+edition = "2021"
 author = "Selim Kentel <selimkentel@gmail.com>"
 description = "Service of litestorm for creating REST APIs"
 keywords = ["litestorm", "liteapi", "futures", "async", "rust", "rest"]
