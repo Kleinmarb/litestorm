@@ -1,0 +1,26 @@
+[package]
+name = "liteapi"
+version = "0.1.0-beta.0"
+author = "Selim Kentel <selimkentel@gmail.com>"
+description = "Service of litestorm for creating REST APIs"
+keywords = ["litestorm", "liteapi", "futures", "async", "rust", "rest"]
+repository = "https://github.com/Kleinmarb/litestorm"
+homepage = "https://github.com/Kleinmarb/litestorm"
+documentation = "https://docs.rs/liteapi"
+categories = ["network-programming", "asynchronous"]
+license = "MIT"
+readme = "../README.md"
+license-file = "../LICENSE"
+
+[lib]
+name = "liteapi"
+path = "src/lib.rs"
+
+[dependencies]
+simple-async = "0.2.0"
+threadpool = "1.8.1"
+rustc-hash = "1.1.0"
+futures-executor = "0.3.21"
+serde_json = "1.0.100"
+num_cpus = "1.16.0"
+ctrlc = "3.4.0"

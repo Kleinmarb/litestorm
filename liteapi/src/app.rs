@@ -6,7 +6,7 @@ use threadpool::ThreadPool;
 use crate::{QueryPairs, Handler, Routes};
 use crate::{is_http_status_code, parse_query_string, extract_method_and_path};
 use crate::http::{Response, StatusCode};
-use futures::executor::block_on;
+use futures_executor::block_on;
 use num_cpus;
 use crate::openapi::openapi;
 use std::sync::atomic::{AtomicBool, Ordering};
