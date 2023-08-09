@@ -6,11 +6,11 @@ It provides comprehensive services to help you build fast and efficientweb appli
 
 ## Services:
 
-- LiteAPI: A powerful REST API with built-in support for OAUTH2 and robust middleware \n
-- StormSQL: A performant SQL Driver \n
-- LitePay: An easy-to-use web payment system \n
-- LiteCache: A caching system to improve performance by storing frequently accessed data \n
-- StormSDK: An SDK for managing sessions, cookies, emails and a lot more \n
+- LiteAPI: A powerful REST API with built-in support for OAUTH2 and robust middleware 
+- StormSQL: A performant SQL Driver 
+- LitePay: An easy-to-use web payment system 
+- LiteCache: A caching system to improve performance by storing frequently accessed data 
+- StormSDK: An SDK for managing sessions, cookies, emails and a lot more 
 
 ## Features:
 
