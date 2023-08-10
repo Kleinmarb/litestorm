@@ -13,7 +13,7 @@ this sounds redundant but by doing that you can give the handler function way mo
 Let's make a simple REST API using liteapi that asks for an apikey as a query-param (don't ask for an apikey as a query-param in production):
 
 ``` rust
-use liteapi::{LiteAPI, QueryPairs, http, entry};
+use liteapi::{LiteAPI, http, entry};
 
 entry! {
     LiteAPI::new().await
@@ -23,7 +23,7 @@ entry! {
 
 // Note that every handler has to take query-pairs as the one and only argument.
 // Also note that the handler can't be asynchronous.
-fn index(q: QueryPairs) -> http::Response {
+fn index(q: http::QueryParams) -> http::Response {
     match q.get("apikey") {
         None => {
             http::Response::Plain(http::StatusCode::Forbidden.detail("Please provide an apikey!"))
@@ -50,7 +50,7 @@ fn index(q: QueryPairs) -> http::Response {
 Let's add another route to this RESTAPI this time we are going to return some html!
 
 ```rust
-use liteapi::{LiteAPI, QueryPairs, http, entry, html2string};
+use liteapi::{LiteAPI, http, entry, html2string};
 
 entry! {
     LiteAPI::new().await
@@ -61,8 +61,8 @@ entry! {
 
 // Note that every handler has to take query-pairs as the one and only argument.
 // Also note that the handler can't be asynchronous.
-fn index(q: QueryPairs) -> http::Response {
-    match q.get("apikey") {
+fn index(query: http::QueryParams) -> http::Response {
+    match query.get("apikey") {
         None => {
             http::Response::Plain(http::StatusCode::Forbidden.detail("Please provide an apikey!"))
         },
@@ -81,7 +81,7 @@ fn index(q: QueryPairs) -> http::Response {
 }
 
 // Here you can see even though we are not working with the query-pairs we have to take them as an argument
-fn template(_: QueryPairs) -> http::Response {
+fn template(_: http::QueryParams) -> http::Response {
     let html = html2string!(r"path\to\template.html").expect("Error reading the html!");
     http::Response::Html(html)
 }

@@ -3,9 +3,9 @@ use std::net::{TcpStream, TcpListener};
 use std::io::{Read, Write};
 use std::string::ToString;
 use threadpool::ThreadPool;
-use crate::{QueryPairs, Handler, Routes};
+use crate::{Handler, Routes};
 use crate::{is_http_status_code, parse_query_string, extract_method_and_path};
-use crate::http::{Response, StatusCode};
+use crate::http::{Response, StatusCode, QueryParams};
 use futures_executor::block_on;
 use num_cpus;
 use crate::openapi::openapi;
@@ -50,7 +50,7 @@ async fn handle_request(request: String, routes: Routes) -> String {
     handle_route(method, query_pairs, stripped_path, routes).await
 }
 
-async fn handle_route(method: String, query_pairs: QueryPairs, path: &str, routes: Routes) -> String {
+async fn handle_route(method: String, query_pairs: QueryParams, path: &str, routes: Routes) -> String {
     // Check if a route exists for the requested path and method
     let route = routes.get(path);
 
@@ -64,7 +64,7 @@ async fn handle_route(method: String, query_pairs: QueryPairs, path: &str, route
 }
 
 #[allow(unused_assignments)]
-async fn handle_route_response(route: Option<&(String, Handler)>, method: String, query_pairs: QueryPairs) -> String {
+async fn handle_route_response(route: Option<&(String, Handler)>, method: String, query_params: QueryParams) -> String {
     match route {
         None => StatusCode::NotFound.parse(), // Send 404 if the path doesnt exist
 
@@ -72,7 +72,7 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
             if route_method.to_owned() != method {
                 StatusCode::MethodNotAllowed.parse() // Send 405 if the method is not allowed on the path
             } else {
-                let response = handler(query_pairs);
+                let response = handler(query_params);
 
                 // Content type to later use as a header to specify what we want to send
                 let mut content_type = String::new();

@@ -1,4 +1,4 @@
-use crate::QueryPairs;
+use crate::http::QueryParams;
 use rustc_hash::FxHashMap;
 
 pub(crate) async fn extract_method_and_path(headers: Vec<&str>) -> Option<(String, String)> {
@@ -14,8 +14,8 @@ pub(crate) async fn extract_method_and_path(headers: Vec<&str>) -> Option<(Strin
     }
 }
 
-pub(crate) async fn parse_query_string(path: &str) -> QueryPairs {
-    let mut result: QueryPairs = FxHashMap::default();
+pub(crate) async fn parse_query_string(path: &str) -> QueryParams {
+    let mut result: QueryParams = FxHashMap::default();
     if let Some(query) = path.split('?').nth(1) {
         for pair in query.split('&') {
             let mut key_value = pair.splitn(2, '=');
