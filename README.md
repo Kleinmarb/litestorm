@@ -2,7 +2,7 @@
 
 
 LiteStorm is a high-level, lightweight backend web framework that delivers exceptional speed and performance. 
-It provides comprehensive services to help you build fast and efficientweb applications.
+It provides comprehensive services to help you build fast and efficient web applications.
 
 ## Services:
 
