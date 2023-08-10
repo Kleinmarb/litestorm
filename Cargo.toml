@@ -1,10 +1,10 @@
 [workspace]
 members = [
     "liteapi",
-    # "stormsql",
-    # "litepay",
-    # "litecache",
-    # "stormsdk", these are gonna follow soon
+    "stormsql",
+    "litepay",
+    "litecache",
+    "stormsdk",
 ]
 
 [workspace.package]
@@ -13,10 +13,10 @@ edition = "2021"
 
 [patch.crates-io]
 liteapi = { path = "liteapi" }
-# stormsql = { path = "stormsql" }
-# litepay = { path = "litepay" }
-# litecache = { path = "litecache" }
-# stormsdk = { path = "stormsdk" }
+stormsql = { path = "stormsql" }
+litepay = { path = "litepay" }
+litecache = { path = "litecache" }
+stormsdk = { path = "stormsdk" }
 
 [profile.release]
 lto = true

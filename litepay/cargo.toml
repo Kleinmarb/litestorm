@@ -1,0 +1,19 @@
+[package]
+name = "litepay"
+version = "0.1.0-beta.0"
+edition = "2021"
+authors = ["Selim Kentel <selimkentel@gmail.com>"]
+description = "Service of litestorm for creating REST APIs"
+keywords = ["litestorm", "litepay", "async", "rust", "payment"]
+repository = "https://github.com/Kleinmarb/litestorm"
+homepage = "https://github.com/Kleinmarb/litestorm"
+documentation = "https://docs.rs/liteapi"
+categories = ["payment", "asynchronous"]
+license = "MIT"
+readme = "README.md"
+
+[lib]
+name = "litepay"
+path = "src/lib.rs"
+
+[dependencies]

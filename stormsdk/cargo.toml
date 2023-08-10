@@ -1,0 +1,19 @@
+[package]
+name = "stormsdk"
+version = "0.1.0-beta.0"
+edition = "2021"
+authors = ["Selim Kentel <selimkentel@gmail.com>"]
+description = "Service of litestorm for different things"
+keywords = ["litestorm", "stormsdk", "async", "rust", "sdk"]
+repository = "https://github.com/Kleinmarb/litestorm"
+homepage = "https://github.com/Kleinmarb/litestorm"
+documentation = "https://docs.rs/liteapi"
+categories = ["tools", "asynchronous"]
+license = "MIT"
+readme = "README.md"
+
+[lib]
+name = "stormsdk"
+path = "src/lib.rs"
+
+[dependencies]
