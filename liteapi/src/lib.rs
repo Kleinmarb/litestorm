@@ -11,6 +11,7 @@ pub use self::app::LiteAPI;
 pub(crate) use self::types::{Handler, Routes};
 pub(crate) use self::utils::*;
 
+pub use serde_json::json;
 pub use serde_json::to_string as json2string;
 use std::fs;
 use std::io::Error;

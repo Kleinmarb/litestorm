@@ -8,12 +8,12 @@ With its user-friendly interface and intuitive design, liteapi makes it easy to 
 
 ## Features
 
-liteapi gives you a lot of flexibility by having to return a http-response with the given enum and taking the query-pairs as an argument,
+liteapi gives you a lot of flexibility by having to return a http-response with the given enum and taking the query-params as an argument,
 this sounds redundant but by doing that you can give the handler function way more flexibility than in other frameworks.
 Let's make a simple REST API using liteapi that asks for an apikey as a query-param (don't ask for an apikey as a query-param in production):
 
 ``` rust
-use liteapi::{LiteAPI, http, entry};
+use liteapi::{LiteAPI, http, entry, json, json2string};
 
 entry! {
     LiteAPI::new().await
@@ -32,9 +32,9 @@ fn index(q: http::QueryParams) -> http::Response {
         Some(apikey) => {
             let secret_apikey = "1234"; // Please dont do this in production
             if apikey == secret_apikey {
-                http::Response::Json("{\"Hello, \": \"World!\"}".to_owned())
-                // Note that there is a json macro with which you can create json objects way easier 
-                // Also note that there is a json2string macro with which you can turn anything into json
+                let json = json!({"Hello, ": "World!"});
+                http::Response::Json(json2string(&json).unwrap())
+                // Also note that there is a json2string macro with which you can turn anything into json in liteapi
             } else {
                 http::Response::Plain(http::StatusCode::Forbidden.detail("The apikey is wrong!"))
             }
@@ -50,7 +50,7 @@ fn index(q: http::QueryParams) -> http::Response {
 Let's add another route to this RESTAPI this time we are going to return some html!
 
 ```rust
-use liteapi::{LiteAPI, http, entry, html2string};
+use liteapi::{LiteAPI, http, entry, html2string, json, json2string};
 
 entry! {
     LiteAPI::new().await
@@ -70,9 +70,9 @@ fn index(query: http::QueryParams) -> http::Response {
         Some(apikey) => {
             let secret_apikey = "1234"; // Please dont do this in production
             if apikey == secret_apikey {
-                http::Response::Json("{\"Hello, \": \"World!\"}".to_owned())
-                // Note that there is a json macro with which you can create json objects way easier 
-                // Also note that there is a json2string macro with which you can turn anything into json
+                let json = json!({"Hello, ": "World!"});
+                http::Response::Json(json2string(&json).unwrap())
+                // Also note that there is a json2string macro with which you can turn anything into json in liteapi
             } else {
                 http::Response::Plain(http::StatusCode::Forbidden.detail("The apikey is wrong!"))
             }
@@ -82,7 +82,7 @@ fn index(query: http::QueryParams) -> http::Response {
 
 // Here you can see even though we are not working with the query-pairs we have to take them as an argument
 fn template(_: http::QueryParams) -> http::Response {
-    let html = html2string!(r"path\to\template.html").expect("Error reading the html!");
+    let html = html2string(r"path\to\template.html").expect("Error reading the html!");
     http::Response::Html(html)
 }
 
