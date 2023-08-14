@@ -20,4 +20,4 @@ stormsdk = { path = "stormsdk" }
 
 [profile.release]
 lto = true
-opt-level = "z"
+opt-level = 3

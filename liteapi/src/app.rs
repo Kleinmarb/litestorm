@@ -91,42 +91,42 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                 let response = match response {
                     Response::Json(content) => {
                         content_type = "application/json".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Html(content) => {
                         content_type = "text/html".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Plain(content) => {
                         content_type = "text/plain".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Css(content) => {
                         content_type = "text/css".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Javascript(content) => {
                         content_type = "application/javascript".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Jpeg(content) => {
                         content_type = "image/jpeg".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::Png(content) => {
                         content_type = "image/png".to_owned();
-                        content
+                        content.to_owned()
                     },
 
                     Response::FormData(content) => {
                         content_type = "multipart/form-data".to_owned();
-                        content
+                        content.to_owned()
                     },
                 };
 
