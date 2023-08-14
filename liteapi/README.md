@@ -93,7 +93,6 @@ Here are some more features, that are going to follow soon:
 
 - liteapi already provides auto OpenAPI documentation just visit localhost:7878/openapi.json/ but it is not customizable yet
 - support for http2.0 and http3.0
-- support for custom middleware
 - support for oauth2 
 - support for websockets
 - support for positional query params: localhost:7878/{id}/{name}/
