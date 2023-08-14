@@ -1,6 +1,7 @@
 use rustc_hash::FxHashMap;
 
 pub type QueryParams = FxHashMap<String, String>;
+pub type Request = String;
 
 #[allow(dead_code)]
 pub enum StatusCode  {

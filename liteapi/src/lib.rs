@@ -7,7 +7,7 @@ pub use futures_executor::block_on as execute;
 pub use self::app::LiteAPI;
 pub mod http;
 
-pub(crate) use self::types::{Handler, Routes};
+pub(crate) use self::types::{Handler, Routes, MiddlewareHandler};
 pub(crate) use self::utils::*;
 pub(crate) mod openapi;
 

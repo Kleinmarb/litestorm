@@ -5,16 +5,27 @@ use std::string::ToString;
 use threadpool::ThreadPool;
 use crate::{Handler, Routes};
 use crate::{is_http_status_code, parse_query_string, extract_method_and_path};
-use crate::http::{Response, StatusCode, QueryParams};
+use crate::http::{Response, StatusCode, QueryParams, Request};
 use futures_executor::block_on;
 use num_cpus;
 use crate::openapi::openapi;
+use crate::types::MiddlewareHandler;
 
-fn handle_client(mut stream: TcpStream, routes: Routes) {
+fn handle_client(mut stream: TcpStream, routes: Routes, middleware: Option<Vec<MiddlewareHandler>>) {
     // Read request from client
     let mut buffer = [0; 4096];
     stream.read(&mut buffer).unwrap();
-    let request = String::from_utf8_lossy(&buffer[..]);
+    let request = &String::from_utf8_lossy(&buffer[..]);
+
+    // Check for custom middleware and call them
+    match middleware {
+        None => {},
+        Some(middleware) => {
+            for handler in middleware {
+                handler(request.to_string())
+            }
+        }
+    }
 
     // Generate response
     let response = block_on(handle_request(request.to_string(), routes));
@@ -26,7 +37,7 @@ fn handle_client(mut stream: TcpStream, routes: Routes) {
     drop(stream);
 }
 
-async fn handle_request(request: String, routes: Routes) -> String {
+async fn handle_request(request: Request, routes: Routes) -> String {
     // Extract headers from request
     let headers: Vec<&str> = request.split("\r\n").collect();
 
@@ -59,7 +70,7 @@ async fn handle_route(method: String, query_pairs: QueryParams, path: &str, rout
         let route = routes.get(&format!("{}/", path));
         handle_route_response(route, method, query_pairs).await
     } else {
-        handle_route_response(route, method, query_pairs).await
+        handle_route_response(route, method, query_pairs,).await
     }
 }
 
@@ -125,7 +136,8 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                     return response;
                 }
 
-                format!("HTTP/1.1 200 OK\r\nContent-Type: {}\r\n\r\n{}", content_type, response) // Send 200 if the method and path are correct
+                let response = format!("HTTP/1.1 200 OK\r\nContent-Type: {}\r\n\r\n{}", content_type, response);
+                response // Send 200 if the method and path are correct
             }
         }
     }
@@ -133,6 +145,7 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
 
 pub struct LiteAPI {
     pub(crate) routes: Routes,
+    pub(crate) middleware: Vec<MiddlewareHandler>,
 }
 
 #[allow(dead_code)]
@@ -140,6 +153,7 @@ impl LiteAPI {
     pub async fn new() -> Self {
         Self {
             routes: FxHashMap::default(),
+            middleware: Vec::new(),
         }
     }
 
@@ -192,6 +206,11 @@ impl LiteAPI {
         return self
     }
 
+    pub async fn middleware(&mut self, handler: MiddlewareHandler) -> &mut Self {
+        self.middleware.push(handler);
+        self
+    }
+
     pub async fn run(&self) {
         // Setup listener
         let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -204,12 +223,22 @@ impl LiteAPI {
 
         // Listen for incoming requests
         loop {
-            let (stream, _) = listener.accept().unwrap();
-            let routes = self.routes.clone();
+            if self.middleware.is_empty() {
+                let (stream, _) = listener.accept().unwrap();
+                let routes = self.routes.clone();
 
-            pool.execute(move || {
-                handle_client(stream, routes);
-            });
+                pool.execute(move || {
+                    handle_client(stream, routes, None);
+                });
+            } else {
+                let (stream, _) = listener.accept().unwrap();
+                let routes = self.routes.clone();
+                let middleware = self.middleware.clone();
+
+                pool.execute(move || {
+                    handle_client(stream, routes, Option::from(middleware));
+                });
+            }
         }
     }
 
