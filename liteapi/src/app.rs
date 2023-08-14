@@ -3,13 +3,12 @@ use std::net::{TcpStream, TcpListener};
 use std::io::{Read, Write};
 use std::string::ToString;
 use threadpool::ThreadPool;
-use crate::{Handler, Routes};
+use crate::{Handler, Routes, MiddlewareHandler};
 use crate::{is_http_status_code, parse_query_string, extract_method_and_path};
 use crate::http::{Response, StatusCode, QueryParams, Request};
 use futures_executor::block_on;
 use num_cpus;
 use crate::openapi::openapi;
-use crate::types::MiddlewareHandler;
 
 fn handle_client(mut stream: TcpStream, routes: Routes, middleware: Option<Vec<MiddlewareHandler>>) {
     // Read request from client
