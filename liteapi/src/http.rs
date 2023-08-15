@@ -2,6 +2,12 @@ use rustc_hash::FxHashMap;
 
 pub type QueryParams = FxHashMap<String, String>;
 pub type Request = String;
+// Methods on request TODO:
+// path
+// ip
+// method
+// headers
+// cookies
 
 #[allow(dead_code)]
 pub enum StatusCode  {
@@ -171,6 +177,9 @@ pub enum Response {
     Png(String),
     FormData(String),
 }
+// Methods on request TODO:
+// set_status
+// set_header
 
 pub enum Method { // Has no use yet
     Get,
