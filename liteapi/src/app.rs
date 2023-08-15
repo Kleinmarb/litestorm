@@ -143,8 +143,9 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
 }
 
 pub struct LiteAPI {
-    pub(crate) routes: Routes,
-    pub(crate) middleware: Vec<MiddlewareHandler>,
+    routes: Routes,
+    middleware: Vec<MiddlewareHandler>,
+    port: i32,
 }
 
 #[allow(dead_code)]
@@ -153,6 +154,7 @@ impl LiteAPI {
         Self {
             routes: FxHashMap::default(),
             middleware: Vec::new(),
+            port: 7878,
         }
     }
 
@@ -210,12 +212,18 @@ impl LiteAPI {
         self
     }
 
+    pub async fn port(&mut self, port: i32) -> &mut Self {
+        self.port = port;
+        self
+    }
+
     pub async fn run(&self) {
         // Setup listener
-        let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+        let addr = &format!("127.0.0.1:{port}", port = self.port);
+        let listener = TcpListener::bind(addr).unwrap();
 
         // Log the startup
-        println!("INFO:     API Server at http://127.0.0.1:7878");
+        println!("INFO:     API Server at http://{addr}");
 
         // Initialize thread pool to enhance speed
         let pool = ThreadPool::new(num_cpus::get());
