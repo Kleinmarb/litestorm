@@ -91,42 +91,42 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                 let response = match response {
                     Response::Json(content) => {
                         content_type = "application/json".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Html(content) => {
                         content_type = "text/html".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Plain(content) => {
                         content_type = "text/plain".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Css(content) => {
                         content_type = "text/css".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Javascript(content) => {
                         content_type = "application/javascript".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Jpeg(content) => {
                         content_type = "image/jpeg".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::Png(content) => {
                         content_type = "image/png".to_owned();
-                        content.to_owned()
+                        content
                     },
 
                     Response::FormData(content) => {
                         content_type = "multipart/form-data".to_owned();
-                        content.to_owned()
+                        content
                     },
                 };
 
@@ -135,8 +135,18 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                     return response;
                 }
 
+                // If there are additional headers...
+                if response.contains("\r\n") {
+                    let last_index = response.rfind("\r\n").unwrap();
+                    let response = format!("{}{}\r\n{}", &response[..last_index], "\r\n", &response[last_index + 2..]);
+                    let response = format!("HTTP/1.1 200 OK\r\nContent-Type: {}\r\n{}", content_type, response);
+
+                    return response; // Send 200 if the method and path are correct
+                };
+
                 let response = format!("HTTP/1.1 200 OK\r\nContent-Type: {}\r\n\r\n{}", content_type, response);
                 response // Send 200 if the method and path are correct
+
             }
         }
     }

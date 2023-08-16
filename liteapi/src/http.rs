@@ -177,9 +177,26 @@ pub enum Response {
     Png(String),
     FormData(String),
 }
-// Methods on request TODO:
-// set_status
-// set_header
+
+impl Response {
+    pub fn set_header(mut self, header: &str, value: &str) -> Self {
+        let formatted_string = format!("{}: {}\r\n", header, value);
+
+        // Add the header to the left side of the content for the header to get send before body content
+        match &mut self {
+            Response::Json(s) => s.insert_str(0, &formatted_string),
+            Response::Html(s) => s.insert_str(0, &formatted_string),
+            Response::Plain(s) => s.insert_str(0, &formatted_string),
+            Response::Css(s) => s.insert_str(0, &formatted_string),
+            Response::Javascript(s) => s.insert_str(0, &formatted_string),
+            Response::Jpeg(s) => s.insert_str(0, &formatted_string),
+            Response::Png(s) => s.insert_str(0, &formatted_string),
+            Response::FormData(s) => s.insert_str(0, &formatted_string),
+        }
+
+        self
+    }
+}
 
 pub enum Method { // Has no use yet
     Get,
