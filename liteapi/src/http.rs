@@ -1,12 +1,9 @@
 use rustc_hash::FxHashMap;
 
 pub type QueryParams = FxHashMap<String, String>;
-pub type Request = String;
+
 // Methods on request TODO:
-// path
 // ip
-// method
-// headers
 // cookies
 
 #[allow(dead_code)]
@@ -196,6 +193,13 @@ impl Response {
 
         self
     }
+}
+
+pub struct Request {
+    pub body: String,
+    pub path: String,
+    pub method: String,
+    pub headers: Vec<String>,
 }
 
 pub enum Method { // Has no use yet

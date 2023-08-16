@@ -9,7 +9,6 @@ pub mod http;
 
 pub(crate) use self::types::{Handler, Routes, MiddlewareHandler};
 pub(crate) use self::utils::*;
-pub(crate) mod openapi;
 
 pub use serde_json::json;
 pub use serde_json::to_string as json2string;

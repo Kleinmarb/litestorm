@@ -5,26 +5,15 @@ use std::string::ToString;
 use threadpool::ThreadPool;
 use crate::{Handler, Routes, MiddlewareHandler};
 use crate::{is_http_status_code, parse_query_string, extract_method_and_path};
-use crate::http::{Response, StatusCode, QueryParams, Request};
+use crate::http::{Response, StatusCode, QueryParams};
 use futures_executor::block_on;
 use num_cpus;
-use crate::openapi::openapi;
 
-fn handle_client(mut stream: TcpStream, routes: Routes, middleware: Option<Vec<MiddlewareHandler>>) {
+fn handle_client(mut stream: TcpStream, routes: Routes, _middleware: Option<Vec<MiddlewareHandler>>) {
     // Read request from client
     let mut buffer = [0; 4096];
     stream.read(&mut buffer).unwrap();
     let request = &String::from_utf8_lossy(&buffer[..]);
-
-    // Check for custom middleware and call them
-    match middleware {
-        None => {},
-        Some(middleware) => {
-            for handler in middleware {
-                handler(request.to_string())
-            }
-        }
-    }
 
     // Generate response
     let response = block_on(handle_request(request.to_string(), routes));
@@ -36,7 +25,7 @@ fn handle_client(mut stream: TcpStream, routes: Routes, middleware: Option<Vec<M
     drop(stream);
 }
 
-async fn handle_request(request: Request, routes: Routes) -> String {
+async fn handle_request(request: String, routes: Routes) -> String {
     // Extract headers from request
     let headers: Vec<&str> = request.split("\r\n").collect();
 
@@ -49,13 +38,6 @@ async fn handle_request(request: Request, routes: Routes) -> String {
     let query_pairs = parse_query_string(&path).await;
 
     let stripped_path: &str = path.split('?').next().unwrap_or(&path);
-
-    // Check if the route is an OpenAPI route and if then return directly
-    if stripped_path == "/openapi.json/".to_owned() || stripped_path == "/openapi.json" {
-        unsafe {
-            return format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{openapi}", openapi = openapi(&routes).await)
-        }
-    }
 
     handle_route(method, query_pairs, stripped_path, routes).await
 }
