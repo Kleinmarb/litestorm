@@ -95,3 +95,4 @@ Here are some more features, that are going to follow soon:
 - support for oauth2 
 - support for websockets
 - support for positional query params: localhost:7878/{id}/{name}/
+
