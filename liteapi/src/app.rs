@@ -47,7 +47,7 @@ async fn handle_route(method: String, query_pairs: QueryParams, path: &str, rout
     let route = routes.get(path);
 
     if route.is_none() {
-        // Check if a route exists for the requested path with an additional '/' at the end
+        // Check if the user searched for the path without /
         let route = routes.get(&format!("{}/", path));
         handle_route_response(route, method, query_pairs).await
     } else {
