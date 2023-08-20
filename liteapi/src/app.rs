@@ -111,6 +111,7 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                         content
                     },
                 };
+                println!("{}", response);
 
                 // Check if the response is a http status code and if send it directly without formatting
                 if is_http_status_code(&response).await {
