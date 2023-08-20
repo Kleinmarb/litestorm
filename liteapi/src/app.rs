@@ -77,6 +77,7 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                     },
 
                     Response::Html(content) => {
+                        // Directly send the response if its html since we dont have to add more headers then
                         let response = format!("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n{}", content);
                         return response;
                     },
