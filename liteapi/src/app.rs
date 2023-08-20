@@ -77,8 +77,8 @@ async fn handle_route_response(route: Option<&(String, Handler)>, method: String
                     },
 
                     Response::Html(content) => {
-                        content_type = "text/html".to_owned();
-                        content
+                        let response = format!("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n{}", content);
+                        return response;
                     },
 
                     Response::Plain(content) => {
